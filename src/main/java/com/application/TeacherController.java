@@ -1,7 +1,8 @@
 package com.application;
 
-import com.library.DAO.StudentDAO;
-import com.library.Models.Student;
+import com.library.Models.Teacher;
+import com.library.DAO.TeacherDAO;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,18 +17,21 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class StudentController {
-    @FXML
-    TableView<Student> studentTable;
+public class TeacherController {
 
     @FXML
-    TableColumn<Student, Integer> idColumn;
+    TableView<Teacher> teacherTable;
+
     @FXML
-    TableColumn<Student, String> firstNameColumn;
+    TableColumn<Teacher, Integer> idColumn;
     @FXML
-    TableColumn<Student, String> lastNameColumn;
+    TableColumn<Teacher, String> firstNameColumn;
     @FXML
-    TableColumn<Student, String> peselColumn;
+    TableColumn<Teacher, String> lastNameColumn;
+    @FXML
+    TableColumn<Teacher, String> peselColumn;
+    @FXML
+    TableColumn<Teacher, String> facultyColumn;
 
     @FXML
     TextField newFirstNameTextField;
@@ -36,21 +40,26 @@ public class StudentController {
     @FXML
     TextField newPeselTextField;
     @FXML
-    Button addNewStudentButton;
+    TextField newFacultyTextField;
+    @FXML
+    Button addNewTeacherButton;
 
-    private ObservableList<Student> data;
+    @FXML
+    Button deleteTeacherButton;
+
+    private ObservableList<Teacher> data;
 
     public void initialize() {
         try {
-            data = FXCollections.observableArrayList(StudentDAO.getInstance().all());
+            data = FXCollections.observableArrayList(TeacherDAO.getInstance().all());
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         setupTableColumns();
-        studentTable.setItems(data);
+        teacherTable.setItems(data);
 
-        studentTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        teacherTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     private void setupTableColumns() {
@@ -66,17 +75,20 @@ public class StudentController {
         peselColumn.setCellValueFactory(
                 new PropertyValueFactory<>("pesel")
         );
+        facultyColumn.setCellValueFactory(
+                new PropertyValueFactory<>("faculty")
+        );
 
         firstNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         lastNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         peselColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
-    public void addStudent() {
+    public void addTeacher() {
         if (newFirstNameTextField.getText().isEmpty() ||
             newLastNameTextField.getText().isEmpty() ||
             newPeselTextField.getText().isEmpty()) {
-            new Alert(Alert.AlertType.ERROR, "Fields can't be empty.").show();
+            new Alert(Alert.AlertType.ERROR, "Fields except faculty can't be empty.").show();
             return;
         }
 
@@ -84,23 +96,25 @@ public class StudentController {
             new Alert(Alert.AlertType.ERROR, "Pesel field must have 11 characters.").show();
             return;
         }
-        Student newStudent;
+        Teacher newTeacher;
         try {
-             newStudent = Student.create(
+             newTeacher = Teacher.create(
                     newFirstNameTextField.getText(),
                     newLastNameTextField.getText(),
-                    newPeselTextField.getText()
-            );
+                    newPeselTextField.getText(),
+                     newFacultyTextField.getText()
+                     );
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Error while trying to add new student\n\n" + e.getMessage()).show();
+            new Alert(Alert.AlertType.ERROR, "Error while trying to add new teacher\n\n" + e.getMessage()).show();
             return;
         }
 
-        data.add(newStudent);
+        data.add(newTeacher);
         newFirstNameTextField.setText("");
         newLastNameTextField.setText("");
         newPeselTextField.setText("");
-        new Alert(Alert.AlertType.INFORMATION, "Student added successfully");
+        newFacultyTextField.setText("");
+        new Alert(Alert.AlertType.INFORMATION, "Teacher added successfully");
     }
 
     public void goBack(ActionEvent event) {
@@ -113,8 +127,8 @@ public class StudentController {
         }
     }
 
-    public void firstNameEditCommit(TableColumn.CellEditEvent<Student, String> event) {
-        Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
+    public void firstNameEditCommit(TableColumn.CellEditEvent<Teacher, String> event) {
+        Teacher s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setFirstName(event.getNewValue());
         try {
             s.save();
@@ -124,8 +138,8 @@ public class StudentController {
         }
     }
 
-    public void lastNameEditCommit(TableColumn.CellEditEvent<Student, String> event) {
-        Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
+    public void lastNameEditCommit(TableColumn.CellEditEvent<Teacher, String> event) {
+        Teacher s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setLastName(event.getNewValue());
         try {
             s.save();
@@ -135,8 +149,8 @@ public class StudentController {
         }
     }
 
-    public void peselEditCommit(TableColumn.CellEditEvent<Student, String> event) {
-        Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
+    public void peselEditCommit(TableColumn.CellEditEvent<Teacher, String> event) {
+        Teacher s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setPesel(event.getNewValue());
         try {
             s.save();
@@ -146,14 +160,14 @@ public class StudentController {
         }
     }
 
-    public void deleteStudent() {
-        ObservableList<Student> students = studentTable.getSelectionModel().getSelectedItems();
-        if (students.size() == 0) {
+    public void deleteTeacher() {
+        ObservableList<Teacher> teachers = teacherTable.getSelectionModel().getSelectedItems();
+        if (teachers.size() == 0) {
             return;
         }
         Alert confirmation = new Alert(
                 Alert.AlertType.CONFIRMATION,
-                "Are you sure you want to delete " + students.size() + " row(s)?",
+                "Are you sure you want to delete " + teachers.size() + " row(s)?",
                 ButtonType.YES, ButtonType.CANCEL
         );
         confirmation.showAndWait();
@@ -161,15 +175,15 @@ public class StudentController {
             return;
         }
 
-        for (Student student : students) {
-            this.data.remove(student);
+        for (Teacher teacher : teachers) {
+            this.data.remove(teacher);
             try {
-                Student.delete(student);
+                Teacher.delete(teacher);
             } catch (SQLException e) {
                 e.printStackTrace();
                 new Alert(
                         Alert.AlertType.ERROR,
-                        "Error occurred when tried to delete student\n\n" + e.getMessage()
+                        "Error occurred when tried to delete teacher\n\n" + e.getMessage()
                 ).show();
             }
         }

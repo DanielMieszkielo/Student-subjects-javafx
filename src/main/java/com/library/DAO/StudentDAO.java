@@ -22,28 +22,20 @@ public class StudentDAO extends ModelDAO<Student> {
                 "pesel      CHARACTER(11)   NOT NULL UNIQUE)";
     }
 
-    private Student parseStudent(ResultSet resultSet) {
-        Student student = null;
-        try {
-            student = new Student(resultSet.getInt("id"));
-            student.setFirstName(resultSet.getString("first_name"));
-            student.setLastName(resultSet.getString("last_name"));
-            student.setPesel(resultSet.getString("pesel"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public Student parse(ResultSet resultSet) throws SQLException {
+        Student student = new Student(resultSet.getInt("id"));
+        student.setFirstName(resultSet.getString("first_name"));
+        student.setLastName(resultSet.getString("last_name"));
+        student.setPesel(resultSet.getString("pesel"));
         return student;
     }
 
-    private ArrayList<Student> parseStudents(ResultSet resultSet) {
+    @Override
+    public ArrayList<Student> parseMultiple(ResultSet resultSet) throws SQLException {
         ArrayList<Student> students = new ArrayList<>();
-
-        try {
-            while (resultSet.next()) {
-                students.add(this.parseStudent(resultSet));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        while (resultSet.next()) {
+            students.add(this.parse(resultSet));
         }
         return students;
     }
@@ -54,12 +46,12 @@ public class StudentDAO extends ModelDAO<Student> {
         query += Helpers.prepare_query_params(params);
         ResultSet rs = DatabaseManager.getInstance().executeQuery(query);
 
-        return this.parseStudent(rs);
+        return this.parse(rs);
     }
 
     public Student get(int id) throws SQLException {
         String query = "SELECT * FROM student WHERE id=" + id;
-        return this.parseStudent(DatabaseManager.getInstance().executeQuery(query));
+        return this.parse(DatabaseManager.getInstance().executeQuery(query));
     }
 
     @Override
@@ -67,7 +59,7 @@ public class StudentDAO extends ModelDAO<Student> {
         String query = "SELECT * FROM student";
         ResultSet resultSet = DatabaseManager.getInstance().executeQuery(query);
 
-        return this.parseStudents(resultSet);
+        return this.parseMultiple(resultSet);
     }
 
     @Override

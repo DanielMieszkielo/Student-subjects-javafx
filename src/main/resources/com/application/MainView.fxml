@@ -7,11 +7,12 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.MainController">
    <children>
-      <Button fx:id="studentButton" layoutX="76.0" layoutY="175.0" mnemonicParsing="false" onAction="#studentButtonClicked" prefHeight="50.0" prefWidth="101.0" text="Show students" />
+      <Button fx:id="studentButton" layoutX="172.0" layoutY="143.0" mnemonicParsing="false" onAction="#studentButtonClicked" prefHeight="27.0" prefWidth="101.0" text="Show students" />
       <Label layoutX="222.0" layoutY="14.0" text="Main Menu">
          <font>
             <Font name="System Bold" size="29.0" />
          </font>
       </Label>
+      <Button fx:id="studentButton1" layoutX="328.0" layoutY="143.0" mnemonicParsing="false" onAction="#teacherButtonClicked" prefHeight="27.0" prefWidth="101.0" text="Show Teachers" />
    </children>
 </AnchorPane>

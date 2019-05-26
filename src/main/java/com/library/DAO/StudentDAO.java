@@ -59,9 +59,7 @@ public class StudentDAO extends ModelDAO<Student> {
 
     public Student get(int id) throws SQLException {
         String query = "SELECT * FROM student WHERE id=" + id;
-        ResultSet rs = DatabaseManager.getInstance().executeQuery(query);
-        Student s = this.parseStudent(rs);
-        return s;
+        return this.parseStudent(DatabaseManager.getInstance().executeQuery(query));
     }
 
     @Override

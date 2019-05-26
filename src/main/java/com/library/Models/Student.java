@@ -1,6 +1,7 @@
 package com.library.Models;
 
 import com.library.DAO.StudentDAO;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.sql.SQLException;
 
@@ -18,6 +19,7 @@ public class Student extends BaseModel {
     public int getId() {
         return id;
     }
+    private void setId(int id) { this.id = id; }
 
     public String getFirstName() {
         return firstName;

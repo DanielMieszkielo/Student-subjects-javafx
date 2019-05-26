@@ -1,6 +1,7 @@
 package com.library;
 
 import com.library.DAO.ModelDAO;
+import com.settings;
 
 import java.sql.*;
 
@@ -10,11 +11,11 @@ public class DatabaseManager {
 
     private String fileName;
 
-    public String getUrl() {
+    private String getUrl() {
         return settings.URL;
     }
 
-    public String getFullUrl() {
+    private String getFullUrl() {
         return "jdbc:sqlite:" + getUrl() + fileName;
     }
 
@@ -64,15 +65,14 @@ public class DatabaseManager {
     }
 
     public ResultSet executeQuery(String sql) throws SQLException {
-        try (Connection conn = this.getConnection()) {
-            return conn.createStatement().executeQuery(sql);
-        }
+        ResultSet rs = this.getConnection().createStatement().executeQuery(sql);
+        this.getConnection().close();
+        return rs;
     }
 
     public void executeUpdate(String sql) throws SQLException {
-        try (Connection conn = this.getConnection()) {
-            conn.createStatement().executeUpdate(sql);
-        }
+        this.getConnection().createStatement().executeUpdate(sql);
+        this.getConnection().close();
     }
 
     public int executeInsert(String sql) {

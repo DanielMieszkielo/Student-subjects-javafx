@@ -1,0 +1,9 @@
+.delete-button {
+    -fx-background-color: #f41f31;
+    -fx-text-fill: #FFFFFF;
+}
+
+.delete-button:selected {
+    -fx-background-color: #9c131a;
+    -fx-text-fill: #d2d2d2;
+}

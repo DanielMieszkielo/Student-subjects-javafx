@@ -93,4 +93,10 @@ public class StudentDAO extends ModelDAO<Student> {
         }
         return id;
     }
+
+    @Override
+    public void delete(int id) throws SQLException {
+        String query = "DELETE FROM student WHERE id=" + id;
+        DatabaseManager.getInstance().executeUpdate(query);
+    }
 }

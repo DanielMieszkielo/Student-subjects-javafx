@@ -59,4 +59,8 @@ public class Student extends BaseModel {
 
         return student;
     }
+
+    public static void delete(Student student) throws SQLException {
+        StudentDAO.getInstance().delete(student.getId());
+    }
 }

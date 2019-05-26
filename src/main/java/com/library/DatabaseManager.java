@@ -3,7 +3,9 @@ package com.library;
 import com.library.DAO.ModelDAO;
 import com.settings;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
+import java.util.List;
 
 public class DatabaseManager {
     private static DatabaseManager ourInstance = new DatabaseManager();
@@ -20,7 +22,7 @@ public class DatabaseManager {
     }
 
     private DatabaseManager() {
-        this.createDatabase("db.sqlite");
+        this.createDatabase(settings.dbFileName);
     }
 
     private void createDatabase(String fileName) {
@@ -48,14 +50,20 @@ public class DatabaseManager {
         return connection;
     }
 
-    public void registerModel(Class<? extends ModelDAO> model) {
-        try {
-            String sql = ((ModelDAO)model.getMethod("getInstance").invoke(null)).createTableSql();
-            this.tryToCreateTable(sql);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
+    public void registerModels(List<Class<? extends ModelDAO>> models) throws SQLException {
+        for (Class<? extends ModelDAO> model : models) {
+            registerModel(model);
         }
+    }
+
+    public void registerModel(Class<? extends ModelDAO> model) throws SQLException {
+        String sql = null;
+        try {
+            sql = ((ModelDAO)model.getMethod("getInstance").invoke(null)).createTableSql();
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        this.tryToCreateTable(sql);
     }
 
     private void tryToCreateTable(String sql) throws SQLException {
@@ -75,17 +83,11 @@ public class DatabaseManager {
         this.getConnection().close();
     }
 
-    public int executeInsert(String sql) {
-        try (Connection conn = this.getConnection()) {
-            PreparedStatement stmtInsert = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmtInsert.executeUpdate();
+    public int executeInsert(String sql) throws SQLException {
+        PreparedStatement stmtInsert = this.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        stmtInsert.executeUpdate();
 
-            ResultSet generatedKeys = stmtInsert.getGeneratedKeys();
-            return (int) generatedKeys.getLong(1);
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return -1;
+        ResultSet generatedKeys = stmtInsert.getGeneratedKeys();
+        return (int) generatedKeys.getLong(1);
     }
 }

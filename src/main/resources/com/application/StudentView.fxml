@@ -6,10 +6,12 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="backButton" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.StudentController">
+<AnchorPane fx:id="backButton" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/StudentView.css" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.application.StudentController">
    <children>
       <Label layoutX="258.0" layoutY="5.0" text="Students">
          <font>
@@ -23,10 +25,16 @@
       <TextField fx:id="newLastNameTextField" layoutX="208.0" layoutY="63.0" prefHeight="25.0" prefWidth="135.0" />
       <Label layoutX="362.0" layoutY="46.0" text="Pesel" />
       <TextField fx:id="newPeselTextField" layoutX="362.0" layoutY="63.0" prefHeight="25.0" prefWidth="135.0" />
-      <Button fx:id="addNewStudentButton" defaultButton="true" layoutX="509.0" layoutY="63.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="25.0" prefWidth="55.0" text="Add" />
-      <ScrollPane layoutX="13.0" layoutY="96.0" prefHeight="294.0" prefWidth="571.0">
+      <Button fx:id="addNewStudentButton" defaultButton="true" layoutX="511.0" layoutY="62.0" mnemonicParsing="false" onAction="#addStudent" prefHeight="25.0" prefWidth="73.0" text="Add">
+          <graphic>
+              <ImageView>
+                  <Image url="@images/add-circle-green-20.png" />
+              </ImageView>
+          </graphic>
+      </Button>
+      <ScrollPane layoutX="13.0" layoutY="96.0" prefHeight="259.0" prefWidth="576.0">
          <content>
-            <TableView fx:id="studentTable" editable="true" prefHeight="292.0" prefWidth="569.0">
+            <TableView fx:id="studentTable" editable="true" prefHeight="269.0" prefWidth="559.0">
               <columns>
                 <TableColumn fx:id="idColumn" editable="false" prefWidth="44.0" text="ID" />
                 <TableColumn fx:id="firstNameColumn" onEditCommit="#firstNameEditCommit" prefWidth="133.0" text="First name" />
@@ -36,5 +44,7 @@
             </TableView>
          </content>
       </ScrollPane>
+      <Button fx:id="deleteStudentButton" layoutX="528.0" layoutY="361.0" mnemonicParsing="false" onAction="#deleteStudent" prefHeight="25.0" prefWidth="56.0" styleClass="delete-button" text="Delete" />
+      <Button layoutX="457.0" layoutY="361.0" mnemonicParsing="false" text="Classes" />
    </children>
 </AnchorPane>

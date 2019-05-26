@@ -14,9 +14,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
-import javax.swing.text.Style;
 import java.io.IOException;
-import java.security.AllPermission;
 import java.sql.SQLException;
 
 public class StudentController {
@@ -51,6 +49,9 @@ public class StudentController {
         }
 
         setupTableColumns();
+        studentTable.setItems(data);
+
+        studentTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
     private void setupTableColumns() {
@@ -66,7 +67,6 @@ public class StudentController {
         peselColumn.setCellValueFactory(
                 new PropertyValueFactory<>("pesel")
         );
-        studentTable.setItems(data);
 
         firstNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         lastNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
@@ -93,7 +93,7 @@ public class StudentController {
                     newPeselTextField.getText()
             );
         } catch (SQLException e) {
-            new Alert(Alert.AlertType.ERROR, "Error while trying to add new student\n\n" + e.getMessage());
+            new Alert(Alert.AlertType.ERROR, "Error while trying to add new student\n\n" + e.getMessage()).show();
             return;
         }
 
@@ -122,7 +122,9 @@ public class StudentController {
         } catch (SQLException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error while trying to save changes\n\n" + e.getMessage());
-        }    }
+        }
+    }
+
     public void lastNameEditCommit(TableColumn.CellEditEvent<Student, String> event) {
         Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setLastName(event.getNewValue());
@@ -131,7 +133,9 @@ public class StudentController {
         } catch (SQLException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error while trying to save changes\n\n" + e.getMessage());
-        }    }
+        }
+    }
+
     public void peselEditCommit(TableColumn.CellEditEvent<Student, String> event) {
         Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setPesel(event.getNewValue());
@@ -140,6 +144,35 @@ public class StudentController {
         } catch (SQLException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error while trying to save changes\n\n" + e.getMessage());
+        }
+    }
+
+    public void deleteStudent(ActionEvent event) {
+        ObservableList<Student> students = studentTable.getSelectionModel().getSelectedItems();
+        if (students.size() == 0) {
+            return;
+        }
+        Alert confirmation = new Alert(
+                Alert.AlertType.CONFIRMATION,
+                "Are you sure you want to delete " + students.size() + " row(s)?",
+                ButtonType.YES, ButtonType.CANCEL
+        );
+        confirmation.showAndWait();
+        if (confirmation.getResult() != ButtonType.YES) {
+            return;
+        }
+
+        for (Student student : students) {
+            this.data.remove(student);
+            try {
+                Student.delete(student);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                new Alert(
+                        Alert.AlertType.ERROR,
+                        "Error occurred when tried to delete student\n\n" + e.getMessage()
+                ).show();
+            }
         }
     }
 }

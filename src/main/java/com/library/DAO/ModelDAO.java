@@ -12,4 +12,5 @@ public abstract class ModelDAO<T> {
     public abstract ArrayList<T> all() throws SQLException;
     public abstract void update(T obj) throws SQLException;
     public abstract int create(T obj) throws SQLException;
+    public abstract void delete(int id) throws SQLException;
 }

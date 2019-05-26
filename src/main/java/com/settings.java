@@ -1,5 +1,6 @@
 package com;
 
+import com.library.DAO.ClassDAO;
 import com.library.DAO.ModelDAO;
 import com.library.DAO.StudentDAO;
 import com.library.DAO.TeacherDAO;
@@ -17,6 +18,7 @@ public class settings {
 
     public static final List<Class<? extends ModelDAO>> models = Arrays.asList(
             StudentDAO.class,
-            TeacherDAO.class
+            TeacherDAO.class,
+            ClassDAO.class
     );
 }

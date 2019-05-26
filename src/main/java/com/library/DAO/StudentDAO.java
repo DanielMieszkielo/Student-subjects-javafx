@@ -49,45 +49,50 @@ public class StudentDAO extends ModelDAO<Student> {
     }
 
     @Override
-    public Student get(HashMap<String, String> params) {
+    public Student get(HashMap<String, String> params) throws SQLException {
         String query = "SELECT * FROM student";
         query += Helpers.prepare_query_params(params);
-        ResultSet rs = DatabaseManager.getInstance().executeQuery(query, true);
+        ResultSet rs = DatabaseManager.getInstance().executeQuery(query);
 
         return this.parseStudent(rs);
     }
 
+    public Student get(int id) throws SQLException {
+        String query = "SELECT * FROM student WHERE id=" + id;
+        ResultSet rs = DatabaseManager.getInstance().executeQuery(query);
+        Student s = this.parseStudent(rs);
+        return s;
+    }
+
     @Override
-    public ArrayList<Student> all() {
+    public ArrayList<Student> all() throws SQLException {
         String query = "SELECT * FROM student";
-        ResultSet resultSet = DatabaseManager.getInstance().executeQuery(query, true);
+        ResultSet resultSet = DatabaseManager.getInstance().executeQuery(query);
 
         return this.parseStudents(resultSet);
     }
 
     @Override
-    public void update(Student student) {
+    public void update(Student student) throws SQLException {
         String query = "UPDATE student SET"
                 + " first_name='" + student.getFirstName() + "'"
                 + ",last_name='" + student.getLastName() + "'"
                 + ",pesel='" + student.getPesel() + "'"
                 + " WHERE id=" + student.getId();
-        DatabaseManager.getInstance().executeQuery(query, false);
+        DatabaseManager.getInstance().executeUpdate(query);
     }
 
     @Override
-    public int create(Student student) {
+    public int create(Student student) throws SQLException {
         String query = "INSERT INTO 'student' (first_name,last_name,pesel) VALUES (\n" +
                 "  '" + student.getFirstName() + "',\n" +
                 "  '" + student.getLastName() + "',\n" +
                 "  '" + student.getPesel() + "'\n" +
                 ");";
-        DatabaseManager.getInstance().executeQuery(query, false);
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put("first_name", student.getFirstName());
-        params.put("last_name", student.getLastName());
-        params.put("pesel", student.getPesel());
-        return this.get(params).getId();
+        int id = DatabaseManager.getInstance().executeInsert(query);
+        if (id == -1) {
+            throw new SQLException("Error while trying to CREATE");
+        }
+        return id;
     }
 }

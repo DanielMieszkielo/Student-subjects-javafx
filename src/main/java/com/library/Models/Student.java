@@ -2,17 +2,18 @@ package com.library.Models;
 
 import com.library.DAO.StudentDAO;
 
+import java.sql.SQLException;
+
 public class Student extends BaseModel {
     private int id;
     private String firstName;
     private String lastName;
     private String pesel;
 
-    private boolean created = false;
-
     public Student(int id) {
         this.id = id;
     }
+    public Student() {}
 
     public int getId() {
         return id;
@@ -43,12 +44,17 @@ public class Student extends BaseModel {
     }
 
     @Override
-    public void save() {
-        if (this.created) {
-            StudentDAO.getInstance().update(this);
-        } else {
-            this.id = StudentDAO.getInstance().create(this);
-            this.created = true;
-        }
+    public void save() throws SQLException {
+        StudentDAO.getInstance().update(this);
+    }
+
+    public static Student create(String firstName, String lastName, String pesel) throws SQLException {
+        Student student = new Student();
+        student.setFirstName(firstName);
+        student.setLastName(lastName);
+        student.setPesel(pesel);
+        student.id = StudentDAO.getInstance().create(student);
+
+        return student;
     }
 }

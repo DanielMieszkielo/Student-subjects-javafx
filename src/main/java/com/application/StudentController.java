@@ -115,11 +115,23 @@ public class StudentController {
     }
 
     public void firstNameEditCommit(TableColumn.CellEditEvent<Student, String> event) {
-        event.getTableView().getItems().get(event.getTablePosition().getRow()).setPesel(event.getNewValue());
-    }
+        Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
+        s.setFirstName(event.getNewValue());
+        try {
+            s.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error while trying to save changes\n\n" + e.getMessage());
+        }    }
     public void lastNameEditCommit(TableColumn.CellEditEvent<Student, String> event) {
-        event.getTableView().getItems().get(event.getTablePosition().getRow()).setPesel(event.getNewValue());
-    }
+        Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
+        s.setLastName(event.getNewValue());
+        try {
+            s.save();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "Error while trying to save changes\n\n" + e.getMessage());
+        }    }
     public void peselEditCommit(TableColumn.CellEditEvent<Student, String> event) {
         Student s = event.getTableView().getItems().get(event.getTablePosition().getRow());
         s.setPesel(event.getNewValue());

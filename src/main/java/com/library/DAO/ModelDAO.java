@@ -11,7 +11,7 @@ public abstract class ModelDAO<T> {
     public abstract String createTableSql();
     public abstract T parse(ResultSet resultSet) throws SQLException;
     public abstract ArrayList<T> parseMultiple(ResultSet resultSet) throws SQLException;
-    public abstract T get(HashMap<String, String> params) throws SQLException;
+    public abstract ArrayList<T> get(HashMap<String, String> params) throws SQLException;
     public abstract ArrayList<T> all() throws SQLException;
     public abstract void update(T obj) throws SQLException;
     public abstract int create(T obj) throws SQLException;

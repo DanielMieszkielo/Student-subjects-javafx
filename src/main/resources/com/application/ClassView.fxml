@@ -20,10 +20,10 @@
          </font>
       </Label>
       <Button layoutX="13.0" layoutY="8.0" mnemonicParsing="false" onAction="#goBack" text="Back" />
-      <Label layoutX="56.0" layoutY="46.0" text="Name" />
-      <TextField fx:id="newNameTextField" layoutX="56.0" layoutY="63.0" prefHeight="25.0" prefWidth="135.0" />
-      <Label layoutX="208.0" layoutY="46.0" text="Teacher" />
-      <ChoiceBox fx:id="newTeacherChoiceBox" layoutX="208.0" layoutY="63.0" prefHeight="25.0" prefWidth="206.0" />
+      <Label layoutX="18.0" layoutY="46.0" text="Name" />
+      <TextField fx:id="newNameTextField" layoutX="16.0" layoutY="63.0" prefHeight="25.0" prefWidth="198.0" />
+      <Label layoutX="229.0" layoutY="46.0" text="Teacher" />
+      <ChoiceBox fx:id="newTeacherChoiceBox" layoutX="229.0" layoutY="63.0" prefHeight="25.0" prefWidth="206.0" />
       <Button fx:id="addNewClassButton" defaultButton="true" layoutX="511.0" layoutY="62.0" mnemonicParsing="false" onAction="#addClass" prefHeight="25.0" prefWidth="73.0" text="Add">
           <graphic>
               <ImageView>
@@ -36,8 +36,8 @@
             <TableView fx:id="classTable" editable="true" prefHeight="269.0" prefWidth="559.0">
               <columns>
                 <TableColumn fx:id="idColumn" editable="false" prefWidth="44.0" text="ID" />
-                <TableColumn fx:id="nameColumn" onEditCommit="#nameEditCommit" prefWidth="133.0" text="Name" />
-                  <TableColumn fx:id="teacherColumn" editable="false" prefWidth="313.0" text="Teacher" />
+                <TableColumn fx:id="nameColumn" onEditCommit="#nameEditCommit" prefWidth="237.0" text="Name" />
+                  <TableColumn fx:id="teacherColumn" editable="false" prefWidth="271.0" text="Teacher" />
               </columns>
             </TableView>
          </content>

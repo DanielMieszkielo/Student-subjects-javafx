@@ -40,10 +40,10 @@ public class ClassDAO extends ModelDAO<Class> {
     }
 
     @Override
-    public Class get(HashMap<String, String> params) throws SQLException {
+    public ArrayList<Class> get(HashMap<String, String> params) throws SQLException {
         String query = "SELECT * FROM class";
         query += Helpers.prepare_query_params(params);
-        return this.parse(DatabaseManager.getInstance().executeQuery(query));
+        return this.parseMultiple(DatabaseManager.getInstance().executeQuery(query));
     }
 
     public Class get(int id) throws SQLException {

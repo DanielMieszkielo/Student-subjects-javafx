@@ -1,9 +1,7 @@
 package com;
 
-import com.library.DAO.ClassDAO;
-import com.library.DAO.ModelDAO;
-import com.library.DAO.StudentDAO;
-import com.library.DAO.TeacherDAO;
+import com.library.DAO.*;
+import com.library.Models.StudentClass;
 import com.library.Models.Teacher;
 
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ public class settings {
     public static final List<Class<? extends ModelDAO>> models = Arrays.asList(
             StudentDAO.class,
             TeacherDAO.class,
-            ClassDAO.class
+            ClassDAO.class,
+            StudentClassDAO.class
     );
 }

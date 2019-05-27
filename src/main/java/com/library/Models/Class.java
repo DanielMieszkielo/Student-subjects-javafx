@@ -56,4 +56,14 @@ public class Class extends BaseModel {
     public static void delete(Class classObj) throws SQLException {
         ClassDAO.getInstance().delete(classObj.getId());
     }
+
+    @Override
+    public String toString() {
+        return this.getName() + " with " + this.getTeacher().getFirstName() + " " + this.getTeacher().getLastName();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Class && getId() == ((Class)obj).getId();
+    }
 }

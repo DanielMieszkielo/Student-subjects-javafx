@@ -26,9 +26,9 @@ public class ClassController {
     @FXML
     TableColumn<Class, Integer> idColumn;
     @FXML
-    TableColumn<Teacher, String> nameColumn;
+    TableColumn<Class, String> nameColumn;
     @FXML
-    TableColumn<Teacher, String> teacherColumn;
+    TableColumn<Class, String> teacherColumn;
 
     @FXML
     TextField newNameTextField;

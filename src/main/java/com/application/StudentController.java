@@ -2,11 +2,13 @@ package com.application;
 
 import com.library.DAO.StudentDAO;
 import com.library.Models.Student;
+import com.library.Models.Teacher;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -172,6 +174,29 @@ public class StudentController {
                         "Error occurred when tried to delete student\n\n" + e.getMessage()
                 ).show();
             }
+        }
+    }
+
+    public void showStudentClasses(ActionEvent event) {
+        Student selectedStudent = studentTable.getSelectionModel().getSelectedItem();
+        if (selectedStudent == null){
+            return;
+        }
+
+        try {
+            StudentClassController.setStudentId(selectedStudent.getId());
+
+            Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            Scene scene = new Scene(FXMLLoader.load(getClass().getResource("StudentClassView.fxml")));
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            new Alert(
+                    Alert.AlertType.ERROR,
+                    "Error occurred\n\n" + e.getMessage()
+            ).show();
         }
     }
 }

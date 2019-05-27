@@ -2,6 +2,7 @@ package com.library.DAO;
 
 import com.library.DatabaseManager;
 import com.library.Helpers;
+import com.library.Models.Class;
 import com.library.Models.StudentClass;
 
 import java.sql.ResultSet;
@@ -41,10 +42,10 @@ public class StudentClassDAO extends ModelDAO<StudentClass> {
     }
 
     @Override
-    public StudentClass get(HashMap<String, String> params) throws SQLException {
+    public ArrayList<StudentClass> get(HashMap<String, String> params) throws SQLException {
         String query = "SELECT * FROM student_class";
         query += Helpers.prepare_query_params(params);
-        return this.parse(DatabaseManager.getInstance().executeQuery(query));
+        return this.parseMultiple(DatabaseManager.getInstance().executeQuery(query));
     }
 
     public StudentClass get(int id) throws SQLException {
@@ -58,6 +59,15 @@ public class StudentClassDAO extends ModelDAO<StudentClass> {
         ResultSet resultSet = DatabaseManager.getInstance().executeQuery(query);
 
         return this.parseMultiple(resultSet);
+    }
+
+    public ArrayList<Class> classesByStudentId(int studentId) throws SQLException {
+        String query = "SELECT c.id, c.name, c.teacherId FROM student_class " +
+                "JOIN class c on student_class.classId = c.id WHERE studentId=" + studentId;
+        ResultSet resultSet = DatabaseManager.getInstance().executeQuery(query);
+        ClassDAO classDAO = new ClassDAO();
+
+        return classDAO.parseMultiple(resultSet);
     }
 
     @Override

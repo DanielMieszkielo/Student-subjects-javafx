@@ -4,8 +4,11 @@ import com.library.DatabaseManager;
 import com.library.Helpers;
 import com.library.Models.Teacher;
 
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,15 +23,15 @@ public class TeacherDAO extends ModelDAO<Teacher> {
                 "first_name VARCHAR(30)     NOT NULL," +
                 "last_name  VARCHAR(30)     NOT NULL," +
                 "faculty    VARCHAR(30)     ," +
-                "pesel      CHARACTER(11)   NOT NULL UNIQUE)";
+                "added_date DATE  DEFAULT (date('now', 'localtime')))";
     }
 
     @Override
     public Teacher parse(ResultSet resultSet) throws SQLException {
         Teacher teacher = new Teacher(resultSet.getInt("id"));
+        teacher.setAddedDate(resultSet.getString("added_date"));
         teacher.setFirstName(resultSet.getString("first_name"));
         teacher.setLastName(resultSet.getString("last_name"));
-        teacher.setPesel(resultSet.getString("pesel"));
         teacher.setFaculty(resultSet.getString("faculty"));
         return teacher;
     }
@@ -67,7 +70,6 @@ public class TeacherDAO extends ModelDAO<Teacher> {
         String query = "UPDATE teacher SET"
                 + " first_name='" + obj.getFirstName() + "'"
                 + ",last_name='" + obj.getLastName() + "'"
-                + ",pesel='" + obj.getPesel() + "'"
                 + ",faculty='" + obj.getFaculty() + "'"
                 + " WHERE id=" + obj.getId();
         DatabaseManager.getInstance().executeUpdate(query);
@@ -75,16 +77,14 @@ public class TeacherDAO extends ModelDAO<Teacher> {
 
     @Override
     public int create(Teacher obj) throws SQLException {
-        String query = "INSERT INTO 'teacher' (first_name,last_name,faculty,pesel) VALUES (\n" +
-                "  '" + obj.getFirstName() + "',\n" +
-                "  '" + obj.getLastName() + "',\n" +
-                "  '" + obj.getFaculty() + "',\n" +
-                "  '" + obj.getPesel() + "'\n" +
+        String query = "INSERT INTO 'teacher' (first_name,last_name,faculty) VALUES (" +
+                "  '" + obj.getFirstName() + "'," +
+                "  '" + obj.getLastName() + "'," +
+                "  '" + obj.getFaculty() + "'" +
                 ");";
         int id = DatabaseManager.getInstance().executeInsert(query);
-        if (id == -1) {
-            throw new SQLException("Error while trying to CREATE");
-        }
+        obj.setAddedDate(TeacherDAO.getInstance().get(id).getAddedDate());
+
         return id;
     }
 

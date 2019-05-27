@@ -2,14 +2,17 @@ package com.library.Models;
 
 import com.library.DAO.TeacherDAO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.sql.SQLException;
 
 public class Teacher extends BaseModel {
     private int id;
     private String firstName;
     private String lastName;
-    private String pesel;
     private String faculty;
+    private Date addedDate;
 
     public Teacher(int id) {
         this.id = id;
@@ -40,14 +43,6 @@ public class Teacher extends BaseModel {
         this.lastName = lastName;
     }
 
-    public String getPesel() {
-        return pesel;
-    }
-
-    public void setPesel(String pesel) {
-        this.pesel = pesel;
-    }
-
     public String getFaculty() {
         return faculty;
     }
@@ -56,16 +51,33 @@ public class Teacher extends BaseModel {
         this.faculty = faculty;
     }
 
+    public Date getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAddedDate(String addedDate) {
+        Date date = null;
+        try {
+            date = new SimpleDateFormat("yyyy-MM-dd").parse(addedDate.toString());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.addedDate = date;
+    }
+
+    public void setAddedDate(Date addedDate) {
+        this.addedDate = addedDate;
+    }
+
     @Override
     public void save() throws SQLException {
         TeacherDAO.getInstance().update(this);
     }
 
-    public static Teacher create(String firstName, String lastName, String pesel, String faculty) throws SQLException {
+    public static Teacher create(String firstName, String lastName, String faculty) throws SQLException {
         Teacher teacher = new Teacher();
         teacher.setFirstName(firstName);
         teacher.setLastName(lastName);
-        teacher.setPesel(pesel);
         teacher.setFaculty(faculty);
         teacher.id = TeacherDAO.getInstance().create(teacher);
 

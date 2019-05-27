@@ -15,6 +15,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Date;
 import java.sql.SQLException;
 
 public class TeacherController {
@@ -29,16 +30,14 @@ public class TeacherController {
     @FXML
     TableColumn<Teacher, String> lastNameColumn;
     @FXML
-    TableColumn<Teacher, String> peselColumn;
-    @FXML
     TableColumn<Teacher, String> facultyColumn;
+    @FXML
+    TableColumn<Teacher, Date> addedDateColumn;
 
     @FXML
     TextField newFirstNameTextField;
     @FXML
     TextField newLastNameTextField;
-    @FXML
-    TextField newPeselTextField;
     @FXML
     TextField newFacultyTextField;
     @FXML
@@ -72,39 +71,34 @@ public class TeacherController {
         lastNameColumn.setCellValueFactory(
                 new PropertyValueFactory<>("lastName")
         );
-        peselColumn.setCellValueFactory(
-                new PropertyValueFactory<>("pesel")
-        );
         facultyColumn.setCellValueFactory(
                 new PropertyValueFactory<>("faculty")
+        );
+        addedDateColumn.setCellValueFactory(
+                new PropertyValueFactory<>("addedDate")
         );
 
         firstNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
         lastNameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-        peselColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        facultyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
     }
 
     public void addTeacher() {
         if (newFirstNameTextField.getText().isEmpty() ||
-            newLastNameTextField.getText().isEmpty() ||
-            newPeselTextField.getText().isEmpty()) {
+            newLastNameTextField.getText().isEmpty()) {
             new Alert(Alert.AlertType.ERROR, "Fields except faculty can't be empty.").show();
             return;
         }
 
-        if (newPeselTextField.getText().length() != 11) {
-            new Alert(Alert.AlertType.ERROR, "Pesel field must have 11 characters.").show();
-            return;
-        }
         Teacher newTeacher;
         try {
              newTeacher = Teacher.create(
-                    newFirstNameTextField.getText(),
-                    newLastNameTextField.getText(),
-                    newPeselTextField.getText(),
+                     newFirstNameTextField.getText(),
+                     newLastNameTextField.getText(),
                      newFacultyTextField.getText()
-                     );
+             );
         } catch (SQLException e) {
+            e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, "Error while trying to add new teacher\n\n" + e.getMessage()).show();
             return;
         }
@@ -112,7 +106,6 @@ public class TeacherController {
         data.add(newTeacher);
         newFirstNameTextField.setText("");
         newLastNameTextField.setText("");
-        newPeselTextField.setText("");
         newFacultyTextField.setText("");
         new Alert(Alert.AlertType.INFORMATION, "Teacher added successfully");
     }
@@ -149,9 +142,9 @@ public class TeacherController {
         }
     }
 
-    public void peselEditCommit(TableColumn.CellEditEvent<Teacher, String> event) {
+    public void facultyEditCommit(TableColumn.CellEditEvent<Teacher, String> event) {
         Teacher s = event.getTableView().getItems().get(event.getTablePosition().getRow());
-        s.setPesel(event.getNewValue());
+        s.setFaculty(event.getNewValue());
         try {
             s.save();
         } catch (SQLException e) {

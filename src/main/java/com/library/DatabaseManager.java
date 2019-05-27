@@ -13,6 +13,8 @@ public class DatabaseManager {
 
     private String fileName;
 
+    private Connection connection;
+
     private String getUrl() {
         return settings.URL;
     }
@@ -37,17 +39,18 @@ public class DatabaseManager {
     }
 
     private Connection getConnection() {
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(this.getFullUrl());
-            if (connection == null) {
-                throw new SQLException("Can't establish connection ");
+        if (this.connection == null) {
+            try {
+                this.connection = DriverManager.getConnection(this.getFullUrl());
+                if (this.connection == null) {
+                    throw new SQLException("Can't establish connection ");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println(e.getMessage());
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println(e.getMessage());
         }
-        return connection;
+        return this.connection;
     }
 
     public void registerModels(List<Class<? extends ModelDAO>> models) throws SQLException {
@@ -67,20 +70,16 @@ public class DatabaseManager {
     }
 
     private void tryToCreateTable(String sql) throws SQLException {
-        try (Connection conn = this.getConnection()) {
-            conn.createStatement().execute(sql);
-        }
+        this.getConnection().createStatement().execute(sql);
     }
 
     public ResultSet executeQuery(String sql) throws SQLException {
         ResultSet rs = this.getConnection().createStatement().executeQuery(sql);
-        this.getConnection().close();
         return rs;
     }
 
     public void executeUpdate(String sql) throws SQLException {
         this.getConnection().createStatement().executeUpdate(sql);
-        this.getConnection().close();
     }
 
     public int executeInsert(String sql) throws SQLException {

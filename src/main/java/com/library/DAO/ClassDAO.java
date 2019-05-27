@@ -71,8 +71,8 @@ public class ClassDAO extends ModelDAO<Class> {
     @Override
     public int create(Class obj) throws SQLException {
         String query = "INSERT INTO class (name,teacherId) VALUES (\n" +
-                "  '" + obj.getName() + "',\n" +
-                "  '" + obj.getTeacher().getId() + "',\n" +
+                "  '" + obj.getName() + "'," +
+                "  '" + obj.getTeacher().getId() + "'" +
                 ");";
         int id = DatabaseManager.getInstance().executeInsert(query);
         if (id == -1) {

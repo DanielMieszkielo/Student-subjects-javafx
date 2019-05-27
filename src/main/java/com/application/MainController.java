@@ -21,6 +21,10 @@ public class MainController {
         this.changeView(event,"TeacherView.fxml");
     }
 
+    public void classButtonClicked(ActionEvent event) {
+        this.changeView(event, "ClassView.fxml");
+    }
+
     private void changeView(ActionEvent event, String name) {
         try {
             Stage stage = (Stage) ((Button) event.getSource()).getScene().getWindow();

@@ -75,4 +75,9 @@ public class Teacher extends BaseModel {
     public static void delete(Teacher teacher) throws SQLException {
         TeacherDAO.getInstance().delete(teacher.getId());
     }
+
+    @Override
+    public String toString() {
+        return this.getFirstName() + " " + this.getLastName() + " @ " + this.getFaculty();
+    }
 }

@@ -53,7 +53,7 @@ public class Class extends BaseModel {
         return classObj;
     }
 
-    public static void delete(Class teacher) throws SQLException {
-        ClassDAO.getInstance().delete(teacher.getId());
+    public static void delete(Class classObj) throws SQLException {
+        ClassDAO.getInstance().delete(classObj.getId());
     }
 }

@@ -45,6 +45,6 @@
          </content>
       </ScrollPane>
       <Button fx:id="deleteStudentButton" layoutX="528.0" layoutY="361.0" mnemonicParsing="false" onAction="#deleteStudent" prefHeight="25.0" prefWidth="56.0" styleClass="delete-button" text="Delete" />
-      <Button layoutX="457.0" layoutY="361.0" mnemonicParsing="false" text="Classes" />
+      <Button layoutX="415.0" layoutY="361.0" mnemonicParsing="false" text="Student's classes" />
    </children>
 </AnchorPane>
